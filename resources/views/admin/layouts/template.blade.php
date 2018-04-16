@@ -10,6 +10,8 @@
   <title>WMSOnline System</title>
   <!-- Bootstrap Core CSS -->
   @include('admin.layouts.inc-stylesheet') @yield('stylesheet')
+  @include('admin.layouts.inc-scripts') @yield('scripts')
+</body>
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
@@ -34,8 +36,7 @@
     <div class="container">
     </div>
   </footer>
-  @include('admin.layouts.modal')
-  @include('admin.layouts.inc-scripts') @yield('scripts')
+  @include('admin.layouts.logoutModal')
 </body>
 
 </html>

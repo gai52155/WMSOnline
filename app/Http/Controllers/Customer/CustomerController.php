@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller; //เรียกใช้ Controller หลักของ Laravel 5.0
 use App\Customer;
+use App\Province;
+use App\Amphures;
+use App\Distincts;
 use Request;
+use Response;
 use App\Http\Requests\Customer\AddCustomerRequest;
 use DB;
 class CustomerController extends Controller
@@ -52,13 +56,26 @@ class CustomerController extends Controller
     $customer_id = $req->get('customer_id');
     $chk = Customer::where('customer_id',$customer_id)->first();
     $customer = $chk ? $chk : new Customer;
+
+    if($req->get('customer_province') != ""){
+      $province = Province::where('PROVINCE_ID', $req->get('customer_province'))->value('PROVINCE_NAME');
+      $customer->customer_province = $province;
+    }
+
+    if($req->get('customer_district') != ""){
+      $amphur = Amphures::where('AMPHUR_ID', $req->get('customer_district'))->value('AMPHUR_NAME');
+      $customer->customer_district = $amphur;
+    }
+
+    if($req->get('customer_subdistrict') != ""){
+      $distinct = Distincts::where('DISTRICT_ID', $req->get('customer_subdistrict'))->value('DISTRICT_NAME');
+      $customer->customer_subdistrict = $distinct;
+    }
+    
     $customer_name = $req->get('customer_name');
     $customer_lastname = $req->get('customer_lastname');
     $customer->customer_namelastname = $customer_name." ".$customer_lastname;
     $customer->customer_addressno = $req->get('customer_addressno');
-    $customer->customer_province = $req->get('customer_province');
-    $customer->customer_district = $req->get('customer_district');
-    $customer->customer_subdistrict = $req->get('customer_subdistrict');
     $customer->customer_postal = $req->get('customer_postal');
     $customer->customer_tel = $req->get('customer_tel');
     $customer->save();
@@ -79,5 +96,20 @@ class CustomerController extends Controller
       'search' => $searchTxt
     ];
     return view('customer.customer', $data);
+  }
+
+  function getProvince(){
+    $data = Province::select('PROVINCE_ID', 'PROVINCE_NAME')->get();
+    return Response::json($data);
+  }
+
+  function getAmphures($province_index){
+    $data = Amphures::select('AMPHUR_ID', 'AMPHUR_NAME')->where('PROVINCE_ID', $province_index)->get();
+    return Response::json($data);
+  }
+
+  function getDistinct($amphur_index){
+    $data = Distincts::select('DISTRICT_ID', 'DISTRICT_NAME')->where('AMPHUR_ID', $amphur_index)->get();
+    return Response::json($data);
   }
 }

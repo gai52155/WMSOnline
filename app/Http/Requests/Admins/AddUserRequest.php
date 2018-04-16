@@ -5,7 +5,7 @@ class AddUserRequest extends FormRequest {
         //กำหนดเงื่อนไข ของการกรองข้อมูล
     public function rules()
     {
-      if($this->get('emp_id') == 0){
+      if($this->get('emp_id') == -99){
       return[
         'emp_id'=>'required|digits:5|unique:employee',
         'emp_username'=>'required|min:5|unique:employee',

@@ -32,7 +32,7 @@
       <div class="form-group">
         <div class="form-row">
             <div class="col-md-6">
-              <label for="goods_limit">จำนวนที่แจ้งเตือน</label>
+              <label for="goods_limit">จำนวนที่แจ้งเตือน(แจ้งเตือนสินค้าใกล้หมด)</label>
               <input type="number" class="form-control" name="goods_limit" value="{{ $goods ? $goods->goods_limit : old('goods_limit') }}">
               {!!$errors->first('goods_limit', '<span class="control-label" style="color:red" for="goods_limit">*:message</span>')!!}
             </div>

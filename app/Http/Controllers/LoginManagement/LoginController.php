@@ -5,13 +5,17 @@ use App\Http\Controllers\Controller; //เรียกใช้ Controller ห�
 use Illuminate\http\Request; // เรียกใช้ Request เมื่อมีการส่ง FORM INPUT
 use App\Http\Requests\LoginRequest;
 use App\Employee;
+use Response;
 use Session;
 use DB;
 
 class LoginController extends Controller
 {
 	public function getIndex(){
-		return view('login');
+		$data=[
+      		'status' => 0
+   		];
+		return view('login', $data);
 	}
 
 	public function login(LoginRequest $req){
@@ -25,13 +29,16 @@ class LoginController extends Controller
 			return redirect('dashboard');
 		}
 		else{
-			echo "Login Failed";
+			$data=[
+      		'status' => 1
+   		];
+		return view('login', $data);
 		}
 	}
 
 	public function logout(){
 		DB::table('employee')->where('emp_username', Session::get('nameLogin'))->update(['emp_status'=>'0']);
     	Session::flush();
-    	return redirect('login');
+    	return redirect('/');
 	}
 }

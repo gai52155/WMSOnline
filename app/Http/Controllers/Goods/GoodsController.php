@@ -12,7 +12,7 @@ use DB;
 class GoodsController extends Controller
 {
     public function getIndex(){
-    $goods = DB::select("SELECT t1.goods_id, t1.goods_name, sum(t2.goods_amount - t2.goods_waste) AS goods_amountall, goods_limit, goods_price, goods_oldprice, goods_booked
+    $goods = DB::select("SELECT t1.goods_id, t1.goods_name, sum(t2.goods_amount) AS goods_amount, t1.goods_limit, t1.goods_price, t1.goods_oldprice, t1.goods_booked
                          FROM goods t1
                          LEFT JOIN goods_detail t2 ON t1.goods_id = t2.goods_id
                          GROUP BY t1.goods_id
@@ -48,6 +48,7 @@ class GoodsController extends Controller
     $goods->goods_name = $req->get('goods_name');
     $goods->goods_price = $req->get('goods_price');
     $goods->goods_limit = $req->get('goods_limit');
+    $goods->goods_booked = 0;
     $goods->save();
 
     return redirect('goods');

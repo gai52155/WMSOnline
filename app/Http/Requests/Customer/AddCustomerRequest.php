@@ -4,24 +4,38 @@ use Illuminate\Foundation\Http\FormRequest;
 class AddCustomerRequest extends FormRequest {
     public function rules()
     {
+        if($this->get('emp_id') == -99){
+          return[
+            'customer_name'=>'required|regex:/^[a-zA-Zก-๙]*$/|min:2',
 
-      return[
-        'customer_name'=>'required|regex:/^[a-zA-Zก-๙]*$/|min:2',
+            'customer_lastname'=>'required|regex:/^[a-zA-Zก-๙]*$/|min:2',
 
-        'customer_lastname'=>'required|regex:/^[a-zA-Zก-๙]*$/|min:2',
+            'customer_addressno'=>'required|min:2',
 
-        'customer_addressno'=>'required|min:2',
+            'customer_subdistrict'=>'required',
 
-        'customer_subdistrict'=>'required|regex:/^[a-zA-Zก-๙]*$/|min:2',
+            'customer_district'=>'required',
 
-        'customer_district'=>'required|regex:/^[a-zA-Zก-๙]*$/|min:2',
+            'customer_province'=>'required',
 
-        'customer_province'=>'required|regex:/^[a-zA-Zก-๙]*$/|min:2',
+            'customer_postal'=>'required|digits:5',
 
-        'customer_postal'=>'required|digits:5',
+            'customer_tel'=>'required|digits_between:9,10'
+          ];
+        }
+        else{
+            return[
+            'customer_name'=>'required|regex:/^[a-zA-Zก-๙]*$/|min:2',
 
-        'customer_tel'=>'required|digits_between:9,10'
-      ];
+            'customer_lastname'=>'required|regex:/^[a-zA-Zก-๙]*$/|min:2',
+
+            'customer_addressno'=>'required|min:2',
+
+            'customer_postal'=>'required|digits:5',
+
+            'customer_tel'=>'required|digits_between:9,10'
+          ];
+        }
     }
 
     public function messages()
@@ -37,13 +51,10 @@ class AddCustomerRequest extends FormRequest {
             'customer_addressno.required' => 'ระบุเลขที่อยู่',
 
             'customer_subdistrict.required' => 'ระบุแขวง',
-            'customer_subdistrict.regex' => 'ระบุแขวงให้ถูกต้อง',
 
             'customer_district.required' => 'ระบุเขต',
-            'customer_district.regex' => 'ระบุเขตให้ถูกต้อง',
 
             'customer_province.required' => 'ระบุจังหวัด',
-            'customer_province.regex' => 'ระบุจังหวัดให้ถูกต้อง',
 
             'customer_postal.required' => 'ระบุหมายเลขไปรษณีย์',
             'customer_postal.digits' => 'ระบุหมายเลขไปรษณีย์เป็นตัวเลข 5 หลัก',

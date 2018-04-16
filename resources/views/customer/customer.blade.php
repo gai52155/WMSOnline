@@ -56,8 +56,8 @@
                 <td>{{$u->customer_namelastname}}</td>
                 <td>
                   {{$u->customer_addressno}}
-                  {{$u->customer_subdistrict}} {{$u->customer_district}}
-                  {{$u->customer_province}} {{$u->customer_postal}}
+                  {{$u->customer_province}} {{$u->customer_district}} {{$u->customer_subdistrict}}
+                   {{$u->customer_postal}}
                 </td>
                 <td>{{$u->customer_tel}}</td>
                 <td class="text-center">
@@ -72,4 +72,7 @@
     </div>
   </div>
 </div>
+<script>
+  $('th, td').addClass('text-center');
+</script>
 @stop

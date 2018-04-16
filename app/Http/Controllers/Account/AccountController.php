@@ -20,8 +20,8 @@ class AccountController extends Controller
     return view('admin.account.accounts', $data);
   }
 
-  public function getForm($emp_id = 0){
-  	if($emp_id != 0){
+  public function getForm($emp_id = -99){
+  	if($emp_id != -99){
         $user = Employee::where('emp_id', $emp_id)->first();
         if(!$user) return redirect('admin.account.account_form');
         else{

@@ -12,17 +12,17 @@ use DB;
 
 class WarehouseController extends Controller
 {
-    public function getIndex(){
-    $storage = Warehouse::selectRaw("*")->get();
-    $search = false;
-    $data=[
-       'storage' => $storage,
-       'search' => $search
-    ];
-     return view('warehouse.warehouse', $data);
+    function getIndex(){
+      $storage = Warehouse::selectRaw("*")->get();
+      $search = false;
+      $data=[
+         'storage' => $storage,
+         'search' => $search,
+      ];
+       return view('warehouse.warehouse', $data);
    }
 
-	 public function getForm($warehouse_id = 0){
+	 function getForm($warehouse_id = 0){
      if($warehouse_id != 0){
          $warehouse = warehouse::where('warehouse_id', $warehouse_id)->first();
          if(!$warehouse) return redirect('warehouse.warehouse_form');
@@ -32,7 +32,7 @@ class WarehouseController extends Controller
      return view('warehouse.warehouse_form',$data);
    }
 
-	 public function getFormInput(WarehouseRequest $req){
+	 function getFormInput(WarehouseRequest $req){
      $warehouse_id = $req->get('warehouse_id');
 		 $storage = $req->get('warehouse_storageCount');
 		 $floor = $req->get('warehouse_floorCount');
@@ -52,7 +52,7 @@ class WarehouseController extends Controller
 			}
 			WarehouseDetail::insert($list);
      }
-		 $warehouse->warehose_status = 0;
+	 $warehouse->warehouse_status = 0;
      $warehouse->warehouse_storageCount = $storage;
      $warehouse->warehouse_floorCount = $floor;
      $warehouse->warehouse_slotCount = $slot;
@@ -61,20 +61,19 @@ class WarehouseController extends Controller
      return redirect('warehouse');
    }
 
-	 public function deleteGoods($goods_id){
+	 function deleteGoods($goods_id){
 		 Goods::where('goods_id', '=', $goods_id)->delete();
 		 return redirect('goods');
 	 }
 
-	 public function searchGoods(){
+	 function searchWarehouse(){
 		 $searchTxt = Request::input('searchTxt');
-		 $searchTSel = Request::input('searchSel');
 
-		 $goods = Goods::where($searchTSel, 'LIKE', "%{$searchTxt}%")->get();
+		 $storage = Warehouse::where('warehouse_id', 'LIKE', "%{$searchTxt}%")->get();
 		 $data=[
-			 'goods' => $goods,
-			 'search' => $searchTxt
+			 'storage' => $storage,
+			 'search' => $searchTxt,
 		 ];
-		 return view('goods.goods', $data);
+		 return view('warehouse.warehouse', $data);
 	 }
 }

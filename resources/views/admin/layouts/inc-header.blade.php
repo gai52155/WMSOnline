@@ -23,15 +23,15 @@
           </a>
         </li>
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
-          <a class="nav-link" href="{{ url('goods') }}">
-            <i class="fa fa-cube fa-fw"></i>
-            <span class="nav-link-text">ข้อมูลสินค้า</span>
-          </a>
-        </li>
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
           <a class="nav-link" href="{{ url('warehouse') }}">
             <i class="fa fa-building-o fa-fw"></i>
             <span class="nav-link-text">ข้อมูลคลังสินค้า</span>
+          </a>
+        </li>
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
+          <a class="nav-link" href="{{ url('goods') }}">
+            <i class="fa fa-cube fa-fw"></i>
+            <span class="nav-link-text">ข้อมูลสินค้า</span>
           </a>
         </li>
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">

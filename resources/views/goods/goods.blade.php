@@ -61,16 +61,16 @@
               <tr>
                 <td><a href="{{url('goods_detail/'.$u->goods_id)}}">{{$u->goods_id}}</a></td>
                 <td>{{$u->goods_name}}</td>
-                <td>@if ($u->goods_amountall == 0)
+                <td>@if ($u->goods_amount == 0)
                       สินค้าหมดแล้ว
-                  @elseif($u->goods_amountall < $u->goods_limit)
-                    <a style="color:red;">{{ $u->goods_amountall }} *สินค้าใกล้หมดแล้ว</a>
+                  @elseif($u->goods_amount < $u->goods_limit)
+                    <a style="color:red;">{{ $u->goods_amount }} *สินค้าใกล้หมดแล้ว</a>
                   @else
-                    {{ $u->goods_amountall }}
+                    {{number_format($u->goods_amount)}}
                   @endif
                 </td>
-                <td>{{$u->goods_price}}</td>
-                <td>{{$u->goods_oldprice}}</td>
+                <td>{{number_format($u->goods_price)}}</td>
+                <td>{{number_format($u->goods_oldprice)}}</td>
                 <td>{{$u->goods_booked}}</td>
                 <td class="text-center">
                   <a href="{{url('goods_edit/'.$u->goods_id)}}" title="" class="edit"><i class="fa fa-edit"></i></a>
@@ -84,4 +84,7 @@
     </div>
   </div>
 </div>
+<script>
+  $('th, td').addClass('text-center');
+</script>
 @stop

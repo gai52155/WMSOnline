@@ -13,12 +13,13 @@ use App\Goods;
 use App\Goods_detail;
 use Response;
 use DB;
+use PDF;
 class OrderController extends Controller
 {
 	function getIndex(){
 		$order = DB::select("SELECT t1.order_id, t1.order_date, t1.order_summary, t1.order_payment_type, t1.order_payment_term, t1.order_payment_status, t1.order_delivery_status, t2.customer_namelastname, t3.emp_name
 							 FROM orders t1
-    						 LEFT JOIN customer_detail t2 ON t1.customer_id = t2.customer_id
+    					 LEFT JOIN customer_detail t2 ON t1.customer_id = t2.customer_id
 							 LEFT JOIN employee t3 ON t1.emp_id = t3.emp_id
 							 GROUP BY t1.order_id
 							 ORDER BY t1.order_id");
@@ -60,7 +61,7 @@ class OrderController extends Controller
 		}
     $order->order_summary = $summary;
     $order->order_payment_term = date('20y-m-d H:i:s', $datep7);
-  	$order->order_payment_status = $req->get('order_payment_status');;
+  	$order->order_payment_status = 0;
   	$order->order_delivery_status = 0;
    	$order->customer_id = $req->get('selectCustomer');
     $order->order_payment_type = $req->get('order_payment_type');
@@ -122,4 +123,69 @@ class OrderController extends Controller
     return Response::json($data);
   }
 
+  function orderSearch(Request $req){
+    $searchTSel = $req->get('searchSel');
+    $searchTxt = $req->get('searchTxt');
+    $searchPayType = $req->get('searchPayType');
+    $where = "";
+    if($searchTSel == "order_id"){
+      $where = "t1.order_id = ".$searchTxt;
+    }
+    else{
+      $where = "t2.customer_namelastname LIKE '%".$searchTxt."%' AND t1.order_payment_status = ".$searchPayType;
+    }
+    $order = DB::select("SELECT t1.order_id, t1.order_date, t1.order_summary, t1.order_payment_type, t1.order_payment_term, t1.order_payment_status, t1.order_delivery_status, t2.customer_namelastname, t3.emp_name
+               FROM orders t1
+               LEFT JOIN customer_detail t2 ON t1.customer_id = t2.customer_id
+               LEFT JOIN employee t3 ON t1.emp_id = t3.emp_id
+               WHERE $where
+               GROUP BY t1.order_id
+               ORDER BY t1.order_id");
+      $search = 1;
+      $data=[
+          'order' => $order,
+          'search' => $search
+      ];
+
+    return view('order.order', $data);
+  }
+
+  function orderInvoice($order_id){
+    $order_start_end = Order::select('order_date', 'order_payment_term', 'customer_id')->where('order_id', $order_id)->first();
+    $customerId = $order_start_end->customer_id;
+    $getCustomer = Customer::select('*')->where('customer_id', $customerId)->first();
+    $orderDetail = DB::select("SELECT t3.goods_name, t3.goods_price, t2.goods_detail_amount,(t2.goods_detail_amount * t3.goods_price) AS sum_price
+                                FROM orders t1
+                                LEFT JOIN order_detail t2 ON t1.order_id = t2.order_id
+                                LEFT JOIN goods t3 ON t2.goods_id = t3.goods_id
+                                WHERE t1.order_id = $order_id");
+
+    $data=[
+          'orderDetail' => $orderDetail,
+          'getCustomer' => $getCustomer,
+          'order_start_end' => $order_start_end,
+          'order_id' => $order_id
+      ];
+    return view('order.order_invoice', $data);
+  }
+
+  function printOrder($order_id){
+    $order_start_end = Order::select('order_date', 'order_payment_term', 'customer_id')->where('order_id', $order_id)->first();
+    $customerId = $order_start_end->customer_id;
+    $getCustomer = Customer::select('*')->where('customer_id', $customerId)->first();
+    $orderDetail = DB::select("SELECT t3.goods_name, t3.goods_price, t2.goods_detail_amount,(t2.goods_detail_amount * t3.goods_price) AS sum_price
+                                FROM orders t1
+                                LEFT JOIN order_detail t2 ON t1.order_id = t2.order_id
+                                LEFT JOIN goods t3 ON t2.goods_id = t3.goods_id
+                                WHERE t1.order_id = $order_id");
+
+    $data=[
+          'orderDetail' => $orderDetail,
+          'getCustomer' => $getCustomer,
+          'order_start_end' => $order_start_end,
+          'order_id' => $order_id
+      ];
+    $pdf = PDF::loadView('order.order_invoice', $data);
+    return $pdf->stream('document.pdf');
+  }
 }

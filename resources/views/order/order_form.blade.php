@@ -65,10 +65,10 @@
           <div class="col-md-6">
             <label for="order_payment_type">รูปแบบการจัดส่ง : </label>
             <label class="radio-inline">
-              <input type="radio" name="order_payment_type" value="0" {{ $order ? $order->order_delivery_status == '0' ? 'checked' : '' : '' }}> ส่งตามที่อยู่ลูกค้า
+              <input type="radio" name="order_delivery_status" value="0" {{ $order ? $order->order_delivery_status == '0' ? 'checked' : '' : '' }}> ส่งตามที่อยู่ลูกค้า
             </label> | 
             <label class="radio-inline">
-              <input type="radio" name="order_payment_type" value="9" {{ $order ? $order->order_delivery_status == '99' ? 'checked' : '' : '' }}> รับของด้วยตนเอง
+              <input type="radio" name="order_delivery_status" value="9" {{ $order ? $order->order_delivery_status == '99' ? 'checked' : '' : '' }}> รับของด้วยตนเอง
             </label>
             {!!$errors->first('order_payment_type', '<span class="control-label" style="color:red" for="order_payment_type">*:message</span>')!!}
           </div>

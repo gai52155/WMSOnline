@@ -6,7 +6,7 @@
 <div class="col-md-8 mx-auto">
 <div class="card">
   <div class="card-header">
-    <i class="fa fa-edit"></i> {{$goods_period != null ? 'แก้ไขข้อมูลการนำเข้า' : 'เพิ่มข้อมูลการนำเข้า'}} {{$goods_id}}
+    <i class="fa fa-edit"></i> เพิ่มข้อมูลการนำเข้า {{$goods_id}}
   </div>
   <div class="card-body">
     <form class="form-horizontal" role="form" method="POST" action="{{ url('goods_detail_form_submit') }}">
@@ -40,7 +40,7 @@
           {!!$errors->first('selectCarco', '<span class="control-label" style="color:red" for="selectCarco">*:message</span>')!!}
           </div>
           
-          <div class="col-md-6" id="setLocation">
+          <div class="col-md-6">
             <label for="selectLocation">เลือกพื้นที่ที่ต้องการเก็บสินค้า</label>
             <select class="form-control" name="selectLocation" id="selectLocation">
             </select>
@@ -59,9 +59,9 @@
       </div>
 
       <div class="form-group">
-        <div class="col-md-6 col-md-offset-4">
-          <button type="submit" class="btn btn-success">
-            <i class="fa fa-save"></i>{{$goods_period == 0 ? ' เพิ่มข้อมูลการนำเข้าสินค้า':' แก้ไขข้อมูลการนำเข้าสินค้า'}}</button>
+        <div class="col-md-12">
+          <button type="submit" class="btn btn-block btn-success">
+            <i class="fa fa-save"></i>เพิ่มข้อมูลการนำเข้าสินค้า</button>
           <a href="{{url('goods_detail_form_submit')}}" style="visibility: hidden"><i class="fa fa-customer-md"></i>New customer</a>
         </div>
       </div>
@@ -73,7 +73,6 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script>
   $(document).ready(function() {
-    $("#setLocation").hide();
     var storage;
     var form = $(this);
     $.ajax({
@@ -97,6 +96,7 @@
     }, "json");
 
     $('#selectCarco').on('change', function() {
+      var cargo = $('#selectCarco').find(":selected").text();
       $('#setLocation').find('option').remove().end();
       if (this.value == "") {
         $("#setLocation").hide();
@@ -104,7 +104,7 @@
         $("#setLocation").show();
         $.ajax({
           type: "GET",
-          url: "/getLocationData",
+          url: "/getLocationData/"+cargo,
           data: form.serialize(),
           dataType: "json",
           success: function(data) {

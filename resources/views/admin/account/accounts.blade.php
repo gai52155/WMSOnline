@@ -85,4 +85,7 @@
     </div>
   </div>
 </div>
+<script>
+  $('th, td').addClass('text-center');
+</script>
 @stop

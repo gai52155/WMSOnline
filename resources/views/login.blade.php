@@ -12,14 +12,20 @@
     <!-- Stylesheets -->
     @include('admin.layouts.inc-stylesheet') @yield('stylesheet')
 </head>
-<body>
+<body background="{{asset('/image/storage.jpg')}}">
 <div class="col-md-4 mx-auto" style="margin-top: 10%">
 	<div class="card">
   		<div class="card-header">
     		<center><i class="fa fa-edit"></i> เข้าสู่ระบบ WMSOnline</center>
   		</div>
   		<div class="card-body">
-	        <form class="form-horizontal" role="form" method="POST" action="loginme">
+  			@if($status == 1)
+	  		<div class="alert alert-danger alert-dismissible fade show">
+			    <button type="button" class="close" data-dismiss="alert">&times;</button>
+			    ระบุ username หรือ PASSWORD ไม่ถูกต้อง
+			</div>
+			@endif
+			  <form class="form-horizontal" role="form" method="POST" action="loginme">
 	        	<input type="hidden" name="_token" value="{{ csrf_token() }}">
 	        	<div class="form-group">
 			        <div class="form-row">
@@ -40,6 +46,7 @@
 	        </form>
 	    </div>
 	</div>
+	@include('admin.layouts.inc-scripts') @yield('scripts')
 </body>
 
 </html>
